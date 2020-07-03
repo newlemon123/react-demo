@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './login.less'
-import login from './images/login.png'
+import logo from './images/unlocked-1.png'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 // login page
@@ -18,21 +18,32 @@ export default class Login extends  Component {
 
 	validatePwd =(rule, value, callback) => {
 		console.log('validate PWD', rule, value);
-		callback();
-		//callback('XX')
+		if(!value){
+			callback("password is required")
+		}else if (value.length<4){
+			callback("password cannot shorter than 4")
+		}else if (value.length>12){
+			callback("password cannot longer than 12")
+		}else if (!/^[a-zA-Z0-9]+$/.test(value)){
+			callback("password must be char or number")
+		}else{
+			callback();
+
+		}
 
 	}
+	handleSubmit = values => {
+		console.log('Received values of form: ', values);
+	};
 
 	render() {
 
-			const onFinish = values => {
-				console.log('Received values of form: ', values);
-			};
+
 
 			return (
 				<div className='login'>
 					<header className='login-header'>
-						<img src={ login } alt='logo' />
+						<img src={ logo } alt='logo' />
 						<h1>Login System</h1>
 					</header>
 					<section className='login-content'>
@@ -42,7 +53,7 @@ export default class Login extends  Component {
 							name="normal_login"
 							className="login-form"
 							initialValues={ { remember: true } }
-							onFinish={ onFinish }
+							onFinish={ this.handleSubmit }
 						>
 							<Form.Item
 								name="username"
@@ -57,7 +68,7 @@ export default class Login extends  Component {
 							</Form.Item>
 							<Form.Item
 								name="password"
-								rules={ [{ required: true, message: 'Please input your Password!' },
+								rules={ [
 								         { validator: this.validatePwd }] }
 							>
 								<Input
@@ -76,11 +87,11 @@ export default class Login extends  Component {
 								</a>
 							</Form.Item>
 
-							<Form.Item>
+							<Form.Item className='register'>
 								<Button type="primary" htmlType="submit" className="login-form-button">
 									Log in
 								</Button>
-								Or <a href="login">register now!</a>
+								Or <a href="login" className='register-button'>register now!</a>
 							</Form.Item>
 						</Form>
 
