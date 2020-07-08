@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import './login.less'
-import logo from './images/unlocked-1.png'
-import { Form, Input, Button, Checkbox } from 'antd';
+// import logo from './images/unlocked-1.png'
+import { Form, Input, Button, Checkbox, PageHeader  } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import {reqLogin} from '../../api'
 // login page
 export default class Login extends  Component {
 
@@ -11,7 +12,7 @@ export default class Login extends  Component {
 
 	componentDidMount() {
 		this.formRef.current.setFieldsValue({
-			username: '',
+			email: '',
 			password:''
 		});
 	}
@@ -34,6 +35,12 @@ export default class Login extends  Component {
 	}
 	handleSubmit = values => {
 		console.log('Received values of form: ', values);
+		const {email, password} = values;
+		reqLogin(email, password).then(response =>{
+			console.log(response.data)
+		}).catch(error =>{
+			console.log(error)
+		});
 	};
 
 	render() {
@@ -43,8 +50,20 @@ export default class Login extends  Component {
 			return (
 				<div className='login'>
 					<header className='login-header'>
-						<img src={ logo } alt='logo' />
-						<h1>Login System</h1>
+
+							<PageHeader
+								className="site-page-header-ghost-wrapper"
+								ghost={false}
+								onBack={() => window.history.back()}
+								title="Login"
+								// subTitle="Login to backend system"
+								extra={[
+									<Button key="3">Language</Button>,
+									<Button key="2">Font size</Button>
+								]}
+							>
+
+							</PageHeader>
 					</header>
 					<section className='login-content'>
 						<h2> Login to portal</h2>
@@ -56,15 +75,14 @@ export default class Login extends  Component {
 							onFinish={ this.handleSubmit }
 						>
 							<Form.Item
-								name="username"
-								rules={ [{ required: true, message: 'Please input your Username!' },
+								name="email"
+								rules={ [{ required: true, message: 'Please input your email!' },
 								         { min: 4, message: 'at least 4 words' },
-								         { max: 12, message: 'max is 12' },
-								         { whitespace: true, message: 'space is not allow' },
-								         { pattern: /^[a-zA-Z0-9]+$/, message: 'username must be string' },] }
+								         { max: 30, message: 'max is 30' },
+								         { whitespace: true, message: 'space is not allow' }] }
 							>
 								<Input prefix={ <UserOutlined className="site-form-item-icon" /> }
-								       placeholder="Username" />
+								       placeholder="email" />
 							</Form.Item>
 							<Form.Item
 								name="password"
