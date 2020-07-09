@@ -5,6 +5,8 @@ function back is promise target
  */
 import axios from 'axios'
 
+
+
 export default function ajax(url, data={},type='GET') {
     if (type ==='GET'){ //send get request
         return axios.get(url, {
@@ -15,9 +17,11 @@ export default function ajax(url, data={},type='GET') {
 
 
     }else if (type ==='POST'){  //send post request
-       return axios.post(url,data)
+       return axios.post(url,data
+       )
     }else {
-        return axios.put(url,data)
+        return axios.put(url,data
+        )
     }
 }
 

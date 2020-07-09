@@ -12,8 +12,8 @@ export default class Login extends  Component {
 
 	componentDidMount() {
 		this.formRef.current.setFieldsValue({
-			email: '',
-			password:''
+			email: 'andigame929@gmail.com',
+			password:'Test123!'
 		});
 	}
 
@@ -23,9 +23,9 @@ export default class Login extends  Component {
 			callback("password is required")
 		}else if (value.length<4){
 			callback("password cannot shorter than 4")
-		}else if (value.length>12){
+		}else if (value.length>12000){
 			callback("password cannot longer than 12")
-		}else if (!/^[a-zA-Z0-9]+$/.test(value)){
+		}else if (!/^[a-zA-Z0-9!]+$/.test(value)){
 			callback("password must be char or number")
 		}else{
 			callback();
@@ -33,15 +33,18 @@ export default class Login extends  Component {
 		}
 
 	}
-	handleSubmit = values => {
+	handleSubmit = (async values => {
 		console.log('Received values of form: ', values);
-		const {email, password} = values;
-		reqLogin(email, password).then(response =>{
-			console.log(response.data)
-		}).catch(error =>{
+		try{
+			const {email, password} = values;
+			const response = await reqLogin(email, password);
+			console.log(response)
+
+		}catch (error) {
 			console.log(error)
-		});
-	};
+		}
+		// const response = reqLogin(email, password);
+	});
 
 	render() {
 
@@ -68,6 +71,7 @@ export default class Login extends  Component {
 					<section className='login-content'>
 						<h2> Login to portal</h2>
 						<Form
+							// aria-label='email'
 							ref={ this.formRef }
 							name="normal_login"
 							className="login-form"
@@ -75,13 +79,17 @@ export default class Login extends  Component {
 							onFinish={ this.handleSubmit }
 						>
 							<Form.Item
+								type='email'
 								name="email"
+								// aria-label='email'
 								rules={ [{ required: true, message: 'Please input your email!' },
 								         { min: 4, message: 'at least 4 words' },
 								         { max: 30, message: 'max is 30' },
 								         { whitespace: true, message: 'space is not allow' }] }
 							>
-								<Input prefix={ <UserOutlined className="site-form-item-icon" /> }
+								<Input
+									aria-label='email'
+									prefix={ <UserOutlined className="site-form-item-icon" /> }
 								       placeholder="email" />
 							</Form.Item>
 							<Form.Item
@@ -90,6 +98,7 @@ export default class Login extends  Component {
 								         { validator: this.validatePwd }] }
 							>
 								<Input
+									aria-label='password'
 									prefix={ <LockOutlined className="site-form-item-icon" /> }
 									type="password"
 									placeholder="Password"
