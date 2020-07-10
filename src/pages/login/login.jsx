@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './login.less'
 // import logo from './images/unlocked-1.png'
-import { Form, Input, Button, Checkbox, PageHeader  } from 'antd';
+import { Form, Input, Button, Checkbox, PageHeader ,message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {reqLogin} from '../../api'
 // login page
@@ -37,8 +37,23 @@ export default class Login extends  Component {
 		console.log('Received values of form: ', values);
 		try{
 			const {email, password} = values;
-			const response = await reqLogin(email, password);
-			console.log(response)
+			const result = await reqLogin(email, password);
+			console.log(result.data);
+			console.log(result)
+			if (result.status === "200"){
+				message.success('successful')
+				// console.log('200')
+
+				const user = result.data
+
+				//jump to other page, no need to back to previous page, using 'replace'.
+				//if need to back to previous page, using
+				this.props.history.replace('/home')
+
+			}else{
+				message.error(result.message)
+
+			}
 
 		}catch (error) {
 			console.log(error)
